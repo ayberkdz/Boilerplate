@@ -1,44 +1,51 @@
 <?php
 
 namespace Core;
-
-use Core\Services;
+use \Jenssegers\Blade\Blade;
 use Valitron\Validator;
 
 class View
 {
-    private $validator;
-
+    public $blade;
+    public $validator;
+    
     public function __construct(Validator $validator)
     {
         $this->validator = $validator;
     }
-
-    public function show(string $view, array $data = [])
+    public function show($view, $data)
     {
-        $blade = Services::blade();
-        $blade->share('errors', $this->validator->errors());
-        $blade->share('posts', $this->validator->data());
-        $blade->directive('hasError', function($name){
-            return 
-            '<?php if(isset($errors["'.$name.'"])): ?>
-                has-error
-            <?php endif; ?>';
+        $this->blade = new Blade(dirname(__DIR__) . '/app/View', dirname(__DIR__) . '/public/cache');
+
+        $this->shares();
+        $this->directives();
+
+        return $this->blade->render($view, $data);
+    }
+
+    public function shares()
+    {
+        $this->blade->share('_post', $this->validator->data());
+        $this->blade->share('errors', $this->validator->errors());
+    }
+
+    public function directives()
+    {
+        $this->blade->directive('hasError', function($name){
+            return '<?php if(isset($errors[' . $name .'])): ?>border-red-500<?php endif; ?>';
         });
-        $blade->directive('getError', function($name){
-            return 
-            '<?php if(isset($errors["'.$name.'"])): ?>
-                <div style="color: red; font-weight: 700;">{{ $errors["'.$name.'"][0] }}</div>
-            <?php endif; ?>';
+
+        $this->blade->directive('getError', function($name){
+            return '<?php if (isset($errors[' . $name . '])): ?><div class="bg-rose-500 text-white"><?=$errors[' . $name . '][0]?></div><?php endif; ?>';
         });
-        $blade->directive('getData', function($name){
-            return 
-            '<?= $posts["'.$name.'"] ?? null; ?>';
+
+        $this->blade->directive('getData', function($name){
+            return '<?= $_post[' . $name .'] ?? null ?>';
         });
-        $blade->directive('timeAgo', function($date){
-            return '<?= timeAgo('.$date.') ?>';
+
+        $this->blade->directive('timeAgo', function($date){
+            return '<?= timeAgo(' . $date . ') ?>';
         });
-        return $blade->render($view, $data);
     }
 }
 ?>

@@ -1,62 +1,60 @@
 <?php
 
 namespace Core;
-
 use Arrilot\DotEnv\DotEnv;
 use Carbon\Carbon;
-use \Illuminate\Database\Capsule\Manager as Capsule;
-use Illuminate\Events\Dispatcher;
-use Illuminate\Container\Container;
+use Illuminate\Database\Capsule\Manager as Capsule;
 use Valitron\Validator;
-use \Whoops\Handler\PrettyPageHandler;
-use Whoops\Run;
 
 class Bootstrap
 {
     public $router;
-    public $validator;
     public $view;
+    public $validator;
 
     public function __construct()
     {
-        DotEnv::load(dirname(__DIR__).'/.env.php');
+        // ENV SETUP
+        DotEnv::load(dirname(__DIR__) . '/.env.php');
 
-        if(config('DEVELOPMENT')) {
-            $whoops = new Run;
-            $whoops->pushHandler(new PrettyPageHandler);
-            $whoops->register();
-        }
+        // DATE SETUP
+        Carbon::setLocale(config('LOCALE', 'tr_TR'));
 
-        Carbon::setLocale(config('LOCALE'));
-
+        // DATABASE SETUP
         $capsule = new Capsule;
-
         $capsule->addConnection([
-            'driver' => 'mysql',
-            'host' => 'localhost',
-            'database' => 'boilerplate',
-            'username' => 'root',
-            'password' => '',
-            'charset' => 'utf8',
-            'collation' => 'utf8_unicode_ci',
-            'prefix' => '',
+            'driver'    => config('DB_DRIVER', 'mysql'),
+            'host'      => config('DB_HOST', 'localhost'),
+            'database'  => config('DB_NAME'),
+            'username'  => config('DB_USER'),
+            'password'  => config('DB_PASSWORD'),
+            'charset'   => config('DB_CHARSET', 'utf8mb4'),
+            'collation' => config('DB_COLLAT', 'utf8mb4_general_ci'),
+            'prefix'    => '',
         ]);
-
-        $capsule->setEventDispatcher(new Dispatcher(new Container));
-
-        // Make this Capsule instance available globally via static methods... (optional)
         $capsule->setAsGlobal();
-
-        // Setup the Eloquent ORM... (optional; unless you've used setEventDispatcher())
         $capsule->bootEloquent();
 
-        $this->router = Services::routes();
+        // ROUTER SETUP
+        $this->router = new \Buki\Router\Router([
+            'base_folder' => '/rembp',
+            'main_method' => 'index',
+            'paths' => [
+                'controllers' => 'app/Controllers',
+                'middlewares' => 'app/Middlewares',
+            ],
+            'namespaces' => [
+                'controllers' => 'Controllers',
+                'middlewares' => 'Middlewares',
+            ]
+        ]);
 
-        $this->validator = Services::validator($_POST);
-        
-        Validator::langDir(dirname(__DIR__) . '/core/language');
+        // VALIDATOR SETUP
+        $this->validator = new Validator($_POST);
+        Validator::langDir(dirname(__DIR__) . '/app/Language/Validator');
         Validator::lang('tr');
 
+        // VIEW SETUP
         $this->view = new View($this->validator);
     }
 

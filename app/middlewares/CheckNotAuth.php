@@ -6,9 +6,8 @@ class CheckNotAuth
 {
     public function handle()
     {
-        // sayfa yüklenmeden önceki kontroller
         if(auth()->isLoggedIn()) {
-            header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? 'http://localhost/Core/'));
+            header('Location:' . redirect('referer'));
             exit;
         }
         return true;

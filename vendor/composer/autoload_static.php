@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit945eb86d667e8e123652b679feed4588
+class ComposerStaticInita5cdd7e6a66de3e70b91cce4e1eef7a2
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -19,17 +19,14 @@ class ComposerStaticInit945eb86d667e8e123652b679feed4588
         'ef65a1626449d89d0811cf9befce46f0' => __DIR__ . '/..' . '/illuminate/events/functions.php',
         '0d59ee240a4cd96ddbb4ff164fccea4d' => __DIR__ . '/..' . '/symfony/polyfill-php73/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
-        'f5969d20ac0ed6159e45425e860579b5' => __DIR__ . '/../..' . '/app/config/Helpers.php',
+        'b6d84edd5920793e49e0fa5e8b11bc0a' => __DIR__ . '/../..' . '/app/Config/Helpers.php',
+        'f8b25ffdfe286da645fb3af8c9d31eaf' => __DIR__ . '/../..' . '/core/Helpers.php',
     );
 
     public static $prefixLengthsPsr4 = array (
         'v' => 
         array (
             'voku\\' => 5,
-        ),
-        'W' => 
-        array (
-            'Whoops\\' => 7,
         ),
         'V' => 
         array (
@@ -54,7 +51,6 @@ class ComposerStaticInit945eb86d667e8e123652b679feed4588
         'P' => 
         array (
             'Psr\\SimpleCache\\' => 16,
-            'Psr\\Log\\' => 8,
             'Psr\\Container\\' => 14,
         ),
         'J' => 
@@ -98,10 +94,6 @@ class ComposerStaticInit945eb86d667e8e123652b679feed4588
         'voku\\' => 
         array (
             0 => __DIR__ . '/..' . '/voku/portable-ascii/src/voku',
-        ),
-        'Whoops\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/filp/whoops/src/Whoops',
         ),
         'Valitron\\' => 
         array (
@@ -162,10 +154,6 @@ class ComposerStaticInit945eb86d667e8e123652b679feed4588
         'Psr\\SimpleCache\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/simple-cache/src',
-        ),
-        'Psr\\Log\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/psr/log/src',
         ),
         'Psr\\Container\\' => 
         array (
@@ -256,15 +244,16 @@ class ComposerStaticInit945eb86d667e8e123652b679feed4588
         'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
         'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
         'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
+        'Verot\\Upload\\Upload' => __DIR__ . '/..' . '/verot/class.upload.php/src/class.upload.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit945eb86d667e8e123652b679feed4588::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit945eb86d667e8e123652b679feed4588::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr4 = ComposerStaticInit945eb86d667e8e123652b679feed4588::$fallbackDirsPsr4;
-            $loader->classMap = ComposerStaticInit945eb86d667e8e123652b679feed4588::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita5cdd7e6a66de3e70b91cce4e1eef7a2::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita5cdd7e6a66de3e70b91cce4e1eef7a2::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr4 = ComposerStaticInita5cdd7e6a66de3e70b91cce4e1eef7a2::$fallbackDirsPsr4;
+            $loader->classMap = ComposerStaticInita5cdd7e6a66de3e70b91cce4e1eef7a2::$classMap;
 
         }, null, ClassLoader::class);
     }

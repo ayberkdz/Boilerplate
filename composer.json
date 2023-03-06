@@ -1,12 +1,11 @@
 {
-    "name": "php/boilerplate",
-    "description": "PHP Boilerplate",
+    "name": "devayberk/boilerplate",
     "autoload": {
         "psr-4": {
-            "Core\\": "./core",
-            "": "./app"
+            "": "./app",
+            "Core\\": "./core"
         },
-        "files": ["./app/config/Helpers.php"]
+        "files": ["./app/Config/Helpers.php", "./core/Helpers.php"]
     },
     "authors": [
         {
@@ -16,12 +15,11 @@
     "require": {
         "izniburak/router": "^2.5",
         "jenssegers/blade": "^1.4",
-        "illuminate/database": "^8.83",
         "vlucas/valitron": "^1.4",
+        "illuminate/database": "^8.83",
         "arrilot/dotenv-php": "^2.0",
-        "illuminate/events": "^8.83",
         "nesbot/carbon": "^2.66",
         "aura/session": "^2.1",
-        "filp/whoops": "^2.14"
+        "verot/class.upload.php": "^2.1"
     }
 }

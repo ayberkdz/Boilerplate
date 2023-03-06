@@ -1,23 +1,23 @@
 <?php
-
 namespace Controllers;
-use Core\Controllers;
+use Core\Controller;
 use \Symfony\Component\HttpFoundation\Request;
 
-
-class Auth extends Controllers
+class Auth extends Controller
 {
     public function login(Request $request)
     {
         if($request->isMethod('POST')) {
             $this->validator->rule('required', ['name', 'password']);
-            if ($this->validator->validate()) {
+
+            if($this->validator->validate()) {
                 $user = auth()->login($this->validator->data());
-                if ($user) {
-                    header('Location: http://localhost/Core/');
-                    return;
-                } elseif(!$user) {
-                    $this->validator->error('error','Kullanıcı adı veya şifre hatalı');
+
+                if($user) {
+                    return redirect()->send();
+                }
+                else {
+                    $this->validator->error('error', 'Kullanıcı adı veya şifre hatalıdır.');
                 }
             }
         }
@@ -28,24 +28,21 @@ class Auth extends Controllers
     {
         if($request->isMethod('POST')) {
             $this->validator->rule('required', ['name', 'password']);
-            if ($this->validator->validate()) {
 
+            if($this->validator->validate()) {
                 $data = $this->validator->data();
-
-                if(auth()->exist($data['name'])) {
-                    $this->validator->error('error', sprintf('%s daha önceden kapılmış.', $data['name']));
+                if(auth()->exists($data['name'])) {
+                    $this->validator->error('error', sprintf('%s kullanıcı adı dolu.', $data['name']));
                 }
                 else {
-                    $user = auth()->register($data());
-                if ($user) {
-                    header('Location: http://localhost/Core/');
-                    return;
-                } else {
-                    $this->validator->error('error','Sorun oldu');
+                    $user = auth()->register($this->validator->data());
+                    if($user) {
+                        return redirect()->send();
+                    }
+                    else {
+                        $this->validator->error('error', 'Bir sorun oluştu.');
+                    }
                 }
-                }
-
-                
             }
         }
         return $this->view('auth.register');
@@ -54,7 +51,7 @@ class Auth extends Controllers
     public function logout()
     {
         auth()->logout();
-        header('Location: http://localhost/Core/');
+        return redirect()->send();
     }
 }
 ?>

@@ -1,39 +1,44 @@
 <?php
-
 namespace Core;
-
+use Aura\Session\Segment;
 use Aura\Session\SessionFactory;
 use Models\User;
 
 class Auth
 {
-    public $segment;
-    private static $instance;
+    public Segment $segment;
+
+    private static Auth $instance;
 
     public static function getInstance()
     {
         if(!isset(self::$instance)) {
             self::$instance = new Auth();
         }
+
         return self::$instance;
     }
+
     public function __construct()
     {
-        $session_factory = new SessionFactory;
+        $session_factory = new SessionFactory();
         $session = $session_factory->newInstance($_COOKIE);
-        
         $this->segment = $session->getSegment('Core\Auth');
     }
 
     public function login($data)
     {
-        $user =  User::where('name', $data['name'])->where('password', $data['password'])->first();
-        if ($user) {
+        $user = User::where('name', $data['name'])->where('password', md5($data['password']))->first();
+        if($user) {
             $this->create($user);
             return $user;
         }
-
         return false;
+    }
+
+    public function exists($name)
+    {
+        return User::where('name', $name)->first();
     }
 
     public function create($data)
@@ -43,23 +48,31 @@ class Auth
         $this->segment->set('id', $data->id);
     }
 
-    public function exist($name)
-    {
-        return User::where('name', $name)->first();
-    }
-
     public function register($data)
     {
+        $data['password'] = md5($data['password']);
         $user = User::create($data);
-        if ($user){
+
+        if($user) {
             $this->create($user);
             return $user;
         }
+        return false;
     }
 
-    public function logout()
+    public function guard()
     {
-        $this->segment->clear();
+        return $this;
+    }
+
+    public function check()
+    {
+        return $this->segment->get('login');
+    }
+
+    public function guest()
+    {
+        return !$this->segment->get('login');
     }
 
     public function isLoggedIn()
@@ -77,19 +90,9 @@ class Auth
         return $this->segment->get('name');
     }
 
-    public function guard()
+    public function logout()
     {
-        return $this;
-    }
-
-    public function check()
-    {
-        return $this->segment->get('login');
-    }
-
-    public function guest()
-    {
-        return ! $this->segment->get('login');
+        $this->segment->clear();
     }
 }
 ?>

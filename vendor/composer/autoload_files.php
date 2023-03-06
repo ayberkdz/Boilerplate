@@ -18,5 +18,6 @@ return array(
     'ef65a1626449d89d0811cf9befce46f0' => $vendorDir . '/illuminate/events/functions.php',
     '0d59ee240a4cd96ddbb4ff164fccea4d' => $vendorDir . '/symfony/polyfill-php73/bootstrap.php',
     'b6b991a57620e2fb6b2f66f03fe9ddc2' => $vendorDir . '/symfony/string/Resources/functions.php',
-    'f5969d20ac0ed6159e45425e860579b5' => $baseDir . '/app/config/Helpers.php',
+    'b6d84edd5920793e49e0fa5e8b11bc0a' => $baseDir . '/app/Config/Helpers.php',
+    'f8b25ffdfe286da645fb3af8c9d31eaf' => $baseDir . '/core/Helpers.php',
 );

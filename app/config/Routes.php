@@ -1,35 +1,31 @@
 <?php
 
-$app->router->any('/', 'Home@index');
+$app->router->controller('/', 'Home');
 
-$app->router->get('/date', 'Home@dates');
-
-$app->router->any('/login', 'Auth@login', [
-    'before' => 'CheckNotAuth'
-]);
-
-$app->router->any('/register', 'Auth@register');
-
+$app->router->any('/login', 'Auth@login', ['before' => 'CheckNotAuth']);
+$app->router->any('/register', 'Auth@register', ['before' => 'CheckNotAuth']);
 $app->router->get('/logout', 'Auth@logout');
 
-$app->router->get('/user/@:slug/:id?', 'User@index');
-
-$app->router->get('/about', function(){
-    return "about";
+$app->router->get('/u/:slug', function($username){
+    return "user : $username";
 });
 
 $app->router->group('/admin', function($router){
     $router->get('/', function(){
-        return "admin sayfa";
+        return 'admin anasayfa';
     });
 
-    $router->get('user', function(){
-        return "admin user sayfa";
+    $router->get('/posts', function(){
+        return 'post anasayfa';
     });
 });
+
+$app->router->get('/api/posts', 'API@posts');
 
 $app->router->notFound(function(){
-    die ("<h3>sayfa bulunamadı</h3>");
+    return '404';
 });
+
+$app->run();
 
 ?>

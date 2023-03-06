@@ -6,11 +6,10 @@ class CheckAuth
 {
     public function handle()
     {
-        // sayfa yüklenmeden önceki kontroller
-        if(auth()->isLoggedIn()) {
-            return true;
+        if(! auth()->isLoggedIn()) {
+            return false;
         }
-        return false;
+        return true;
     }
 }
 ?>
